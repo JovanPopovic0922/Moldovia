@@ -2,7 +2,7 @@ import axios from "axios";
 
 const API_URL = "http://localhost:8080/api/auth/";
 
-// this has 4 functions 
+// this has 4 functions
 const signup = (username, email, password) => {
     console.log('hi this is authservice sign up');
   return axios.post(API_URL + "signup", {
