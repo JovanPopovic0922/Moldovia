@@ -4,6 +4,8 @@ import MenuItem from '@mui/material/MenuItem';
 import { Button, Grid } from "@mui/material";
 import Avatar from '@mui/material/Avatar';
 import { children, genders, countries, maritalStates, studies } from "../../constants/constants";
+import { DesktopDatePicker, LocalizationProvider } from "@mui/lab"
+import AdapterDateFns from '@mui/lab/AdapterDateFns';
 
 export default function AddDetailForm(){
     const [gender, setGender] = React.useState('male');
@@ -13,6 +15,11 @@ export default function AddDetailForm(){
     const [maritalState, setMaritalState] = React.useState('');
     const [study, setStudy] = React.useState('');
     const [child, setChild] = React.useState('0');
+
+    const [birthDate, setBirthDate] = React.useState(new Date('2011-01-01'));
+    const [passportExpDate, setPassportExpDate] = React.useState(new Date('2011-01-01'));
+    const [passportIssueDate, setPassportIssueDate] = React.useState(new Date('2011-01-01'));
+    // const [Date, setBirthDate] = React.useState('');
 
     const handleGender = (event) => {
         setGender(event.target.value);
@@ -42,10 +49,26 @@ export default function AddDetailForm(){
         setChild(event.target.value);
     }
 
+    const handleBirthDate = (newValue) => {
+        setBirthDate(newValue);
+    }
+
+    const handlePassportExpDate = (newValue) => {
+        setPassportExpDate(newValue);
+    }
+
+    const handlePassportIssueDate = (newValue) => {
+        setPassportIssueDate(newValue);
+    }
+
+    const addDetails = () => {
+        console.log('Hello I am Add Details');
+    }
+
     return(
         <>
             <Grid container justifyContent={'flex-start'} marginTop={"20px"} rowSpacing={1} columnSpacing={2} >
-                <Grid item xs={2} spacing={2}>
+                <Grid item xs={2}>
                    <Avatar
                         alt="Remy Sharp"
                         src="/images/1.jpg"
@@ -93,36 +116,16 @@ export default function AddDetailForm(){
                             />
                     </Grid>
                     <Grid item xs={12} className="input-column" >
-                            {/* Birth date */}
-                            <TextField
-                            required
-                            id="outlined-required"
-                            label="Birth date"
-                            defaultValue=""
+                        {/* Birth date */}
+                        <LocalizationProvider    dateAdapter={AdapterDateFns}>
+                            <DesktopDatePicker
+                                label="Birth Date"
+                                inputFormat="MM-dd-yyyy"
+                                value={birthDate}
+                                onChange={handleBirthDate}
+                                renderInput={(params) => <TextField {...params} />}
                             />
-                            {/* Birth Month */}
-                            <TextField
-                            required
-                            id="outlined-required"
-                            label="Birth Month"
-                            defaultValue=""
-                            />
-                            {/* Birth Year */}
-                            <TextField
-                            required
-                            id="outlined-required"
-                            label="Birth Year"
-                            defaultValue=""
-                            />
-                            {/* Birth Time */}
-                            <TextField
-                                required
-                                id="outlined-required"
-                                label="Birth Time"
-                                defaultValue=""
-                            />
-                    </Grid>
-                    <Grid item xs={12} className="input-column" >
+                        </LocalizationProvider>
                         {/* Birth city */}
                         <TextField
                             required
@@ -179,7 +182,7 @@ export default function AddDetailForm(){
                         <TextField
                             id="outlined-select-currency"
                             select
-                            label="Birth Country"
+                            label="Living Country"
                             style={{width:'178px', height:'20px'}}
                             value={livingCountry}
                             onChange={handleLivingCountry}
@@ -252,68 +255,29 @@ export default function AddDetailForm(){
                             label="Passport Authority"
                             defaultValue=""
                         />
-                    </Grid>
-                    <Grid item xs={12} className="input-column">
-                    {/* Passport ExpDate  */}
-                        <TextField
-                            required
-                            id="outlined-required"
-                            label="Passport ExpDate"
-                            defaultValue=""
-                        />
-                        {/* Passport ExpMonth  */}
-                        <TextField
-                            required
-                            id="outlined-required"
-                            label="Passport ExpMonth"
-                            defaultValue=""
-                        />
-                        {/* Passport ExpYear  */}
-                        <TextField
-                            required
-                            id="outlined-required"
-                            label="Passport ExpYear"
-                            defaultValue=""
-                        />
-                        {/* Passport ExpTime  */}
-                        <TextField
-                            required
-                            id="outlined-required"
-                            label="Passport ExpTime"
-                            defaultValue=""
-                        />
+                   
+                        {/* Passport ExpDate  */}
+                        <LocalizationProvider    dateAdapter={AdapterDateFns}>
+                            <DesktopDatePicker
+                                label="Passport ExpDate"
+                                inputFormat="MM-dd-yyyy"
+                                value={passportExpDate}
+                                onChange={handlePassportExpDate}
+                                renderInput={(params) => <TextField {...params} />}
+                            />
+                        </LocalizationProvider>
                     </Grid>
                     <Grid item xs={12} className="input-column">
                         {/* Passport IssueDate  */}
-                        <TextField
-                            required
-                            id="outlined-required"
-                            label="Passport IssueDate"
-                            defaultValue=""
-                        />
-                        {/* Passport IssueMonth  */}
-                        <TextField
-                            required
-                            id="outlined-required"
-                            label="Passport IssueMonth"
-                            defaultValue=""
-                        />
-                        {/* Passport IssueYear  */}
-                        <TextField
-                            required
-                            id="outlined-required"
-                            label="Passport IssueYear"
-                            defaultValue=""
-                        />
-                        {/* Passport IssueTime  */}
-                        <TextField
-                            required
-                            id="outlined-required"
-                            label="Passport IssueTime"
-                            defaultValue=""
-                        />
-                    </Grid>
-                    <Grid item xs={12} className="input-column">
+                        <LocalizationProvider    dateAdapter={AdapterDateFns}>
+                            <DesktopDatePicker
+                                label="Passport ExpDate"
+                                inputFormat="MM-dd-yyyy"
+                                value={passportIssueDate}
+                                onChange={handlePassportIssueDate}
+                                renderInput={(params) => <TextField {...params} />}
+                            />
+                        </LocalizationProvider>
                         {/* Marital Status */}
                         <TextField
                             id="outlined-select-currency"
@@ -363,7 +327,7 @@ export default function AddDetailForm(){
                    </Grid> 
                 </Grid>
                 <Grid item xs={2}>
-                    <Button variant="contained">Submit</Button>
+                    <Button onClick={addDetails} variant="contained">Submit</Button>
                 </Grid>
            </Grid>
         </>
