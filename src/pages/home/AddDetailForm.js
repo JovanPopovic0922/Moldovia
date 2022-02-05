@@ -1,25 +1,54 @@
-import React from "react";
+import React, { useEffect, useRef, useState, useContext } from "react";
 import TextField from '@mui/material/TextField';
 import MenuItem from '@mui/material/MenuItem';
-import { Button, Grid } from "@mui/material";
+import { Button, Grid, styled, Divider } from "@mui/material";
 import Avatar from '@mui/material/Avatar';
 import { children, genders, countries, maritalStates, studies } from "../../constants/constants";
 import { DesktopDatePicker, LocalizationProvider } from "@mui/lab"
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 
-export default function AddDetailForm(){
-    const [gender, setGender] = React.useState('male');
-    const [birthCountry, setBirthCountry] = React.useState('');
-    const [livingCountry, setLivingCountry] = React.useState('');
-    const [passportCountry, setPassportCountry] = React.useState('');
-    const [maritalState, setMaritalState] = React.useState('');
-    const [study, setStudy] = React.useState('');
-    const [child, setChild] = React.useState('0');
+import AppContext from "../../context/AppContext";
 
-    const [birthDate, setBirthDate] = React.useState(new Date('2011-01-01'));
-    const [passportExpDate, setPassportExpDate] = React.useState(new Date('2011-01-01'));
-    const [passportIssueDate, setPassportIssueDate] = React.useState(new Date('2011-01-01'));
-    // const [Date, setBirthDate] = React.useState('');
+const Input = styled('input')({
+    display: 'none',
+});
+
+export default function AddDetailForm(){
+
+    const GlobalSetting = useContext(AppContext);
+
+    const [gender, setGender] =  useState('male');
+    const [birthCountry, setBirthCountry] =  useState('');
+    const [livingCountry, setLivingCountry] =  useState('');
+    const [passportCountry, setPassportCountry] =  useState('');
+    const [maritalState, setMaritalState] =  useState('');
+    const [study, setStudy] =  useState('');
+    const [child, setChild] =  useState('0');
+
+    const [birthDate, setBirthDate] =  useState(new Date('2011-01-01'));
+    const [passportExpDate, setPassportExpDate] =  useState(new Date('2011-01-01'));
+    const [passportIssueDate, setPassportIssueDate] =  useState(new Date('2011-01-01'));
+    // const [Date, setBirthDate] =  useState('');
+    const [avatar, setAvatar] =  useState();
+    const [preview, setPreview] =  useState();
+
+    // Marital State, Children
+    const maritalStateCalledOnce = useRef(false);
+    const hasChildrenSateCalledOnce = useRef(false);
+
+    useEffect(() =>{
+        if(maritalStateCalledOnce.current){
+            return;
+        }
+        maritalStateCalledOnce.current = true;
+    }, [GlobalSetting.isMarried]);
+
+    useEffect(() =>{
+        if(hasChildrenSateCalledOnce.current){
+            return;
+        }
+        hasChildrenSateCalledOnce.current = true;
+    }, [GlobalSetting.hasChildren]);
 
     const handleGender = (event) => {
         setGender(event.target.value);
@@ -39,14 +68,20 @@ export default function AddDetailForm(){
 
     const handleMaritalState = (event) => {
         setMaritalState(event.target.value);
+        if(event.target.value === 'married'){
+            GlobalSetting.setIsMarried(true);
+        }
     }
 
     const handleStudy = (event) => {
         setStudy(event.target.value);
+       
     }
 
     const handleChildren = (event) => {
         setChild(event.target.value);
+        GlobalSetting.setHasChildren(event.target.value);
+        console.log(GlobalSetting.hasChildren);
     }
 
     const handleBirthDate = (newValue) => {
@@ -61,19 +96,41 @@ export default function AddDetailForm(){
         setPassportIssueDate(newValue);
     }
 
+    const handleAvatarImage = (event) => {
+        setAvatar(event.target.files[0]);
+        console.log(event.target.files[0]);
+    }
+
     const addDetails = () => {
         console.log('Hello I am Add Details');
     }
 
+
+    useEffect(() => {
+        if(!avatar){
+            setPreview(undefined);
+            return;
+        }
+        const objectUrl = URL.createObjectURL(avatar)
+        setPreview(objectUrl)
+        // free memory when ever this component is unmounted
+        return () => URL.revokeObjectURL(avatar)
+    }, [avatar])
+
     return(
         <>
-            <Grid container justifyContent={'flex-start'} marginTop={"20px"} rowSpacing={1} columnSpacing={2} >
-                <Grid item xs={2}>
-                   <Avatar
+            <Grid container justifyContent={'flex-start'} marginTop={"20px"} paddingBottom = {'30px'} borderBottom ={'1px solid #1976d2'} rowSpacing={1} columnSpacing={2} >
+                <Grid item xs={2} justifyContent={'center'}>
+                   <Avatar 
                         alt="Remy Sharp"
-                        src="/images/1.jpg"
-                       sx ={{width:180, height:180}}
+                        src={preview}
+                        sx ={{width:180, height:180}}
+                        style = {{marinLeft:'5px '}}
                     />
+                    <Button variant="contained" style={{marginTop:"20px", marginLeft:"50px"}} component="label" >
+                        Upload
+                       <input type={'file'}  onChange={handleAvatarImage} hidden></input>
+                   </Button>
                 </Grid>
                 <Grid  item xs={8} >
                    <Grid container gap={'10px'} >
