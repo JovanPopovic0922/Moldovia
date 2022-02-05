@@ -13,9 +13,10 @@ const Input = styled('input')({
     display: 'none',
 });
 
-export default function AddDetailForm(){
+export default function AddDetailForm(props){
 
     const GlobalSetting = useContext(AppContext);
+    var relation = props.relation;
 
     const [gender, setGender] =  useState('male');
     const [birthCountry, setBirthCountry] =  useState('');
@@ -120,17 +121,20 @@ export default function AddDetailForm(){
     return(
         <>
             <Grid container justifyContent={'flex-start'} marginTop={"20px"} paddingBottom = {'30px'} borderBottom ={'1px solid #1976d2'} rowSpacing={1} columnSpacing={2} >
-                <Grid item xs={2} justifyContent={'center'}>
-                   <Avatar 
-                        alt="Remy Sharp"
-                        src={preview}
-                        sx ={{width:180, height:180}}
-                        style = {{marinLeft:'5px '}}
-                    />
-                    <Button variant="contained" style={{marginTop:"20px", marginLeft:"50px"}} component="label" >
-                        Upload
-                       <input type={'file'}  onChange={handleAvatarImage} hidden></input>
-                   </Button>
+                <Grid item xs={2} >
+                    <Grid container justifyContent={'center'} gap={'20px'}>
+                        <Button  variant="contained">{relation}</Button>
+                        <Avatar 
+                            alt="Remy Sharp"
+                            src={preview}
+                            sx ={{width:180, height:180}}
+                            style = {{marinLeft:'5px '}}
+                        />
+                        <Button variant="contained" component="label" >
+                            Upload
+                            <input type={'file'}  onChange={handleAvatarImage} hidden></input>
+                        </Button>
+                    </Grid>
                 </Grid>
                 <Grid  item xs={8} >
                    <Grid container gap={'10px'} >
