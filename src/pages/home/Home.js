@@ -10,20 +10,22 @@ export default function Home(){
    const [arrayChildren, setArrayChildren] = useState([])
     
    useEffect(()=>{
-    if(GlobalSetting.hasChildren>0){
-      for(let i = 0; i < GlobalSetting.hasChildren; i++){
-        arrayChildren.push(<AddDetailForm />);
-        setArrayChildren ([...arrayChildren, <AddDetailForm  key={i}/>]);
+    if(GlobalSetting.hasChildren > 0){
+      var newChildren = [];
+      for(let i = 0; i < GlobalSetting.hasChildren ; i++){
+        newChildren.push(<AddDetailForm  key={i} who={'children'+ i}/>)
       }
+      setArrayChildren(newChildren);
     }
    },[GlobalSetting.hasChildren])
 
+   console.log(arrayChildren);
    return(
        <Layout>
-           <AddDetailForm />
+           <AddDetailForm who={'main'} />
            {
-                GlobalSetting.isMarried&&(
-                    <AddDetailForm />
+              GlobalSetting.isMarried&&(
+                    <AddDetailForm who={'wife'} />
                 )
            }
            {
